@@ -37,11 +37,11 @@
 
 
 ## 1.3、论文方法流程图
-论文流程图
+
+<img width="390" height="586" alt="image" src="https://github.com/user-attachments/assets/9dbf221b-d8ff-498c-b08c-8de1a14e0850" />
 
 <img width="354" height="1015" alt="image" src="https://github.com/user-attachments/assets/a124b7f8-09e1-47ce-b421-52e9a9e2ca5f" />
 
-<img width="486" height="746" alt="image" src="https://github.com/user-attachments/assets/59304f42-2349-4812-b1e3-4f1e07a19aaf" />
 
 ## 1.4、论文结论
 
@@ -87,7 +87,11 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 # 五、论文公式对应代码注释
 
+能量放大块
 
+<img width="860" height="147" alt="image" src="https://github.com/user-attachments/assets/40f72ff8-ba83-426d-9c40-362fd6452a51" />
+
+SCI模块
 
 
 
