@@ -87,11 +87,22 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 # 五、论文公式对应代码注释
 
-能量放大块
+能量放大器模块
 
 <img width="860" height="147" alt="image" src="https://github.com/user-attachments/assets/40f72ff8-ba83-426d-9c40-362fd6452a51" />
 
 SCI模块
+
+<img width="1047" height="402" alt="image" src="https://github.com/user-attachments/assets/fae578cd-efa4-496b-a926-7cb42ee48c40" />
+
+季节-趋势预测器模块
+
+<img width="1076" height="161" alt="image" src="https://github.com/user-attachments/assets/1cae29a5-bf02-40fb-819e-997dab80c64c" />
+
+
+
+
+
 
 
 
