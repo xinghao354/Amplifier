@@ -13,17 +13,35 @@
 
 能量放大块：通过频谱翻转将高能量区域的能量“转移”到低能量区域，使低能量成分的能量增强，生成双能量峰频谱。
 
-公式： X′[ k ] = X[ T − k ] ,    X Amp = X + X′
+公式如下：
+
+<img width="431" height="39" alt="image" src="https://github.com/user-attachments/assets/63be545d-def8-45de-9e2d-b5a4dabbdc46" />
+
+##
+<img width="434" height="66" alt="image" src="https://github.com/user-attachments/assets/f0d97ac8-1569-489a-9cf0-54d1e7e4855f" />
+
+## 
+<img width="441" height="36" alt="image" src="https://github.com/user-attachments/assets/667539e7-b13d-457f-981a-28c7b50adeb9" />
  
 目的是让模型在训练中平等对待高、低能量成分。
 
 能量恢复块：
 
-通过频域线性操作（公式 Y′ = X′W + B ）预测需移除的翻转频谱，再从放大后的频谱中减去该分量，最终逆变换回时域，恢复原始能量水平。
+通过频域线性操作（公式 Y′ = X′W + B ）预测需移除的翻转频谱，再从放大后的频谱中减去该分量，最终逆变换回时域，恢复原始能量水平。公式如下。
+
+##
+<img width="398" height="34" alt="image" src="https://github.com/user-attachments/assets/0d4f0156-92bc-42c0-b1ad-261e5cf73ab3" />
+
+##
+<img width="424" height="121" alt="image" src="https://github.com/user-attachments/assets/5f8d1247-9d89-492c-b52c-f2826d0a28ae" />
+
 
 ## 1.3、论文方法流程图
+论文流程图
 
 <img width="354" height="1015" alt="image" src="https://github.com/user-attachments/assets/a124b7f8-09e1-47ce-b421-52e9a9e2ca5f" />
+
+<img width="486" height="746" alt="image" src="https://github.com/user-attachments/assets/59304f42-2349-4812-b1e3-4f1e07a19aaf" />
 
 ## 1.4、论文结论
 
@@ -32,6 +50,9 @@
 
 # 二、论文公式和程序代码文件名行数对照表
 
+## 2.1、论文模型所用公式及其对应代码表格如下
+
+<img width="845" height="620" alt="image" src="https://github.com/user-attachments/assets/580ec158-a52e-4c90-95a0-d6bbec79b743" />
 
 # 三、安装说明
 
