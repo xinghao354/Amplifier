@@ -73,7 +73,14 @@
 
 源码链接：https://github.com/aikunyi/Amplifier?utm_source=catalyzex.com
 
-## 3.1、创建环境
+## 3.1、数据准备
+
+根据README文件中Data Preparation部分要求，前往谷歌网盘[Google Drive]下载数据，原网址为：(https://drive.google.com/drive/folders/1ZOYpTUa82_jCcxIdTmyr0LXQfvaM9vIy) 
+
+下载压缩包解压后创建一个文件夹命名为dataset，将数据放入后将该文件夹与Amplifier-main文件夹放在一块。
+数据按照文件要求放置例如"./dataset/ETT-small/ETTh1.csv"
+
+## 3.2、创建环境
 
 在conda里按照文件要求创建环境（命令如下）
 
@@ -99,8 +106,11 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 # 四、运行结果
 
+打开项目后按照scripts文件夹里的文件调整参数训练，作者给出了ELC、ETTH1、ETTM1的训练参数。
 
 # 五、论文公式对应代码注释
+
+## 5.1 Amplifier.py模型-论文公式对应代码
 
 能量放大器模块
 
@@ -114,8 +124,14 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 代码注释：
 
-<img width="860" height="147" alt="image" src="https://github.com/user-attachments/assets/40f72ff8-ba83-426d-9c40-362fd6452a51" />
-
+```python
+        # Energy Amplification Block（能量放大块）
+        x_fft = torch.fft.rfft(x, dim=1)   # domain conversion 将时域输入 x 转成复数频谱（长度=seq_len//2+1）
+        x_inverse_fft = torch.flip(x_fft, dims=[1])  # flip the spectrum  把频谱沿频率轴翻转，实现 X'[k] = X[T-k]
+        x_inverse_fft = x_inverse_fft * self.mask_matrix # 用掩码屏蔽直流/奈奎斯特分量，防止能量泄漏（X'）
+        x_amplifier_fft = x_fft + x_inverse_fft # 能量放大，公式：XAmp = X +X′
+        x_amplifier = torch.fft.irfft(x_amplifier_fft, dim=1) # 回到时域，得到能量放大后的信号，即公式：XAmp = IDFT(XAmp)
+```
 SCI模块
 
 公式10：
@@ -128,7 +144,26 @@ SCI模块
 
 代码注释：
 
-<img width="1047" height="402" alt="image" src="https://github.com/user-attachments/assets/fae578cd-efa4-496b-a926-7cb42ee48c40" />
+```python
+ # SCI block（半通道模块）
+        if self.SCI:
+            x = x_amplifier    # 用能量放大后的信号作为输入
+            # extract common pattern
+            # --- ① 提取共性 Common Pattern ---
+            # 把 C 个变量压成 1 维，得到“抽象主通道”
+            common_pattern = self.extract_common_pattern(x)   #共性提取,公式10：XCom = CompressionC(X)
+            common_pattern = self.model_common_pattern(common_pattern.permute(0, 2, 1)).permute(0, 2, 1)
+            # model specific pattern
+            # --- ② 求特异性 Specific Pattern ---
+            # 原信号剪掉共性 → 残差即各通道独有部分
+            specififc_pattern = x - common_pattern.repeat(1, 1, C)   #特异性提取，即公式XSpc = X − XCp
+            specififc_pattern = self.model_spacific_pattern(specififc_pattern.permute(0, 2, 1)).permute(0, 2, 1) # 对每条特异性序列单独做 FFN
+                                                       #公式11：XSp = FFN(XSpc)
+            # --- ③ 融合并输出 ---
+            # 把建模后的特异性与共性加回，形成最终表示
+            x = specififc_pattern + common_pattern.repeat(1, 1, C)
+            x_amplifier = x                 # 覆盖变量，继续向下游传递
+```
 
 季节-趋势预测器模块
 
@@ -146,7 +181,14 @@ SCI模块
 
 代码注释：
 
-<img width="1076" height="161" alt="image" src="https://github.com/user-attachments/assets/1cae29a5-bf02-40fb-819e-997dab80c64c" />
+```python
+        # Seasonal Trend Forecaster（季节-趋势预测器）
+        # 把能量放大后的序列分解为季节项与趋势项
+        seasonal, trend = self.decompsition(x_amplifier)    #季节趋势分解，即公式12：XSci Trend,XSci Season = STD(XSci)
+        seasonal = self.linear_seasonal(seasonal.permute(0, 2, 1)).permute(0, 2, 1) #季节预测，即公式13：YSci Season = Season-FFN(XSci Season)
+        trend = self.linear_trend(trend.permute(0, 2, 1)).permute(0, 2, 1)  #趋势预测，即公式13：YSci Trend = Trend-FFN(XSci Trend)
+        out_amplifier = seasonal + trend    #合并输出，即公式14：Y = YSci Trend +YSci Season
+```
 
 能量恢复模块
 
@@ -160,12 +202,139 @@ SCI模块
 
 代码注释：
 
-<img width="1086" height="120" alt="image" src="https://github.com/user-attachments/assets/37da55da-d12f-4e34-99e4-45de97aa6f09" />
+```python
+        # Energy Restoration Block（能量恢复模块）
+        out_amplifier_fft = torch.fft.rfft(out_amplifier, dim=1)    #把季节-趋势预测器输出的时域信号转到频域，即能量恢复公式9：YAmp = DFT(YAmp)
+        x_inverse_fft = self.freq_linear(x_inverse_fft.permute(0, 2, 1)).permute(0, 2, 1) #将早期保留的翻转谱长度映射到与预测谱一致（公式8：Y′=X′W+B）
+        out_fft = out_amplifier_fft - x_inverse_fft                 #减掉人为加入的翻转谱，恢复原始能量水平，即能量恢复公式9：Y = YAmp −Y′
+        out = torch.fft.irfft(out_fft, dim=1)                       #逆FFT回到时域，得到最终预测值Ŷ，即能量恢复公式9：Yˆ = IDFT(Y)
+```
 
-返回，代码注释：
+## 5.2 Amplifier.py模型其余部分代码大致注释
 
-<img width="711" height="152" alt="image" src="https://github.com/user-attachments/assets/c94e0487-f5f9-4333-bcbd-d36174d94f31" />
+```python
+import torch
+import torch.nn as nn
+from layers.RevIN import RevIN
 
+
+# ------------------------------------------------------------------------------
+# 滑动平均块：用简单平均提取“趋势”
+# ------------------------------------------------------------------------------
+class moving_avg(nn.Module):
+    """
+    Moving average block to highlight the trend of time series
+    """
+
+    def __init__(self, kernel_size, stride):
+        super(moving_avg, self).__init__()
+        self.kernel_size = kernel_size
+        #  一维平均池化 ≈ 滑动平均（stride=1 保证长度不变）
+        self.avg = nn.AvgPool1d(kernel_size=kernel_size, stride=stride, padding=0)
+
+    def forward(self, x):
+        ## 两端镜像补零，防止边界被截断
+        # padding on the both ends of time series
+        front = x[:, 0:1, :].repeat(1, (self.kernel_size - 1) // 2, 1)
+        end = x[:, -1:, :].repeat(1, (self.kernel_size - 1) // 2, 1)
+        x = torch.cat([front, x, end], dim=1)
+        ## 池化在时间维操作：先转置 → 池化 → 再转回来
+        x = self.avg(x.permute(0, 2, 1))
+        x = x.permute(0, 2, 1)
+        return x
+
+# ------------------------------------------------------------------------------
+# 季节-趋势分解：原始序列 = 季节残差 + 趋势
+# ------------------------------------------------------------------------------
+class series_decomp(nn.Module):
+    """
+    Series decomposition block
+    """
+
+    def __init__(self, kernel_size):
+        super(series_decomp, self).__init__()
+        # 滑动平均窗口大小由外部传入，stride 固定 1
+        self.moving_avg = moving_avg(kernel_size, stride=1)
+
+    def forward(self, x):
+        moving_mean = self.moving_avg(x)       #趋势分量
+        res = x - moving_mean                  #季节残差分量
+        return res, moving_mean
+
+# ------------------------------------------------------------------------------
+# Amplifier 主模型
+# ------------------------------------------------------------------------------
+class Model(nn.Module):
+    def __init__(self, configs):
+        super(Model, self).__init__()
+        # 读取参数
+        self.seq_len = configs.seq_len
+        self.pred_len = configs.pred_len
+        self.channels = configs.enc_in
+        self.hidden_size = configs.hidden_size
+
+        # >>> 可逆实例归一化（RevIN）用于稳定分布
+        self.revin_layer = RevIN(configs.enc_in, affine=True, subtract_last=False)
+
+        # 季节-趋势分解窗口大小（25）
+        kernel_size = 25
+        self.decompsition = series_decomp(kernel_size)
+
+        # 能量放大掩码：奈奎斯特分量（可训练）
+        self.mask_matrix = nn.Parameter(torch.ones(int(self.seq_len / 2) + 1, self.channels))
+
+        # 复数线性层：历史频谱长度 → 预测频谱长度
+        self.freq_linear = nn.Linear(int(self.seq_len / 2) + 1, int(self.pred_len / 2) + 1).to(torch.cfloat)
+        # >>> 季节分量预测器：T → pred_len
+        self.linear_seasonal = nn.Sequential(
+            nn.Linear(self.seq_len, self.hidden_size),
+            nn.LeakyReLU(),
+            nn.Linear(self.hidden_size, self.pred_len)
+        )
+
+        # >>> 趋势分量预测器：同上结构
+        self.linear_trend = nn.Sequential(
+            nn.Linear(self.seq_len, self.hidden_size),
+            nn.LeakyReLU(),
+            nn.Linear(self.hidden_size, self.pred_len)
+        )
+
+        # SCI block
+        self.SCI = configs.SCI  # SCI 块开关
+        # >>> 通道压缩：C → 1，抽“共性”
+        self.extract_common_pattern = nn.Sequential(
+            nn.Linear(self.channels, self.channels),
+            nn.LeakyReLU(),
+            nn.Linear(self.channels, 1)
+        )
+
+        # >>> 共性时序建模 FFN
+        self.model_common_pattern = nn.Sequential(
+            nn.Linear(self.seq_len, self.hidden_size),
+            nn.LeakyReLU(),
+            nn.Linear(self.hidden_size, self.seq_len)
+        )
+
+        # >>> 特异性时序建模 FFN
+        self.model_spacific_pattern = nn.Sequential(
+            nn.Linear(self.seq_len, self.hidden_size),
+            nn.LeakyReLU(),
+            nn.Linear(self.hidden_size, self.seq_len)
+        )
+
+    # ------------------------------------------------------------------------------
+    # 前向传播
+    # -----------------------------------------------------------------------------
+    def forward(self, x, x_mark_enc, x_dec, x_mark_dec, mask=None):
+        B, T, C = x.size()  # >>> 取维度：B=batch，T=历史长度，C=变量数
+
+        # RevIN  // >>> 可逆归一化：减均值除标准差，稳定分布
+        z = x
+        z = self.revin_layer(z, 'norm')
+        x = z
+
+```
+后面接5.1内容
 
 
 
