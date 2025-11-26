@@ -112,11 +112,11 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 现在训练EETM1部分注意路径改为（../../dataset/ETT-small/与run.py里的格式一致）
 
-参数1：model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02 （没开sci）
+参数1：data_path ETTm1.csv model_id ETTm1 model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02 （没开sci）
 
-参数2：model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 1 batch_size 32  learning_rate 0.02 （打开sci）
+参数2：data_path ETTm1.csv model_id ETTm1 model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 1 batch_size 32  learning_rate 0.02 （打开sci）
 
-参数3：model DLinear data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02    （对照模型）
+参数3：data_path ETTm1.csv model_id ETTm1 model DLinear data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02    （对照模型）
 
 完成界面如下：
 
@@ -132,6 +132,7 @@ mse:0.31615880131721497, mae:0.3549429178237915
 
 <img width="554" height="399" alt="image" src="https://github.com/user-attachments/assets/6264bf8b-530b-46e3-ad85-265cfa8ae143" />
 
+##
 参数2结果（图均选140）（开sci）
 
 ETTm1_Amplifier_ETTm1_sl96_pl96_hidden128_SCI1_epochs100_bc32_lr0.02_0  
@@ -140,6 +141,7 @@ mse:0.36960580945014954, mae:0.39149343967437744
 
 <img width="555" height="403" alt="image" src="https://github.com/user-attachments/assets/f4b01084-47e8-4e5e-9e17-b3ffec6660e6" />
 
+##
 参数3结果（图均选140）（对照组）
 
 ETTm1_DLinear_ETTm1_sl96_pl96_hidden128_SCI1_epochs100_bc32_lr0.02_0  
@@ -147,6 +149,161 @@ ETTm1_DLinear_ETTm1_sl96_pl96_hidden128_SCI1_epochs100_bc32_lr0.02_0
 mse:0.34127920866012573, mae:0.3702485263347626
 
 <img width="555" height="407" alt="image" src="https://github.com/user-attachments/assets/52fc45d3-1a56-4279-b545-b98c785fb841" />
+
+##
+现在调节参数将pred_len 改为128 得到（由于图太多下面不在比较sci）
+
+参数4：data_path ETTm1.csv model_id ETTm1 model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 128  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02 （没开sci）
+
+参数5：data_path ETTm1.csv model_id ETTm1 model DLinear data ETTm1 features M  seq_len 96  label_len 48 pred_len 1128  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02    （对照模型）
+
+参数4结果（图均选140）（没开sci）
+
+ETTm1_Amplifier_ETTm1_sl96_pl192_hidden128_SCI0_epochs100_bc32_lr0.02_0  
+
+mse:0.3615686893463135, mae:0.3812195956707001
+
+<img width="557" height="399" alt="image" src="https://github.com/user-attachments/assets/51ef97d2-61c2-4665-8e3f-5fe564489b19" />
+
+##
+参数5结果（图均选140）（对照）
+
+ETTm1_DLinear_ETTm1_sl96_pl192_hidden128_SCI0_epochs100_bc32_lr0.02_0  
+
+mse:0.38090980052948, mae:0.38987720012664795
+
+<img width="558" height="406" alt="image" src="https://github.com/user-attachments/assets/2c8becf9-b8cd-4082-b8b5-c4f3e3d88d94" />
+
+剩余修改参数部分结果相似不再展示图像，其图像在test_results中
+
+其mse和mae结果如下
+
+ETTm1_Amplifier_ETTm1_sl96_pl336_hidden128_SCI0_epochs100_bc32_lr0.02_0
+
+mse:0.39222079515457153, mae:0.40396058559417725
+
+ETTm1_DLinear_ETTm1_sl96_pl336_hidden128_SCI0_epochs100_bc32_lr0.02_0  
+
+mse:0.41643595695495605, mae:0.41885897517204285
+
+ETTm1_DLinear_ETTm1_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0  
+
+mse:0.473723828792572, mae:0.45304062962532043
+
+ETTm1_Amplifier_ETTm1_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0  
+
+mse:0.45502984523773193, mae:0.4399554431438446
+
+预测事件越长两种模型效果越差，但放大器模型始终更优。
+##
+## 4.2 项目自带ETTh1数据部分运行结果
+
+现在训练EETh1部分注意路径改为（../../dataset/ETT-small/与run.py里的格式一致）
+
+参数1：data_path ETTh1.csv model_id ETTh1 model Amplifier data ETTh1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 64  SCI 0 batch_size 256  learning_rate 0.02 （没开sci）
+
+参数2：data_path ETTh1.csv model_id ETTh1 model Amplifier data ETTh1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 64  SCI 1 batch_size 256  learning_rate 0.02 （打开sci）
+
+参数3：data_path ETTh1.csv model_id ETTh1 model DLinear data ETTh1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 64  SCI 0 batch_size 256  learning_rate 0.02   （对照模型）
+
+参数1结果
+
+ETTh1_Amplifier_ETTh1_sl96_pl96_hidden64_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.37124910950660706, mae:0.3922630548477173
+
+<img width="560" height="402" alt="image" src="https://github.com/user-attachments/assets/eb6c26f2-712a-44ba-b2e7-07c03361003c" />
+
+##
+参数2结果
+
+ETTh1_Amplifier_ETTh1_sl96_pl96_hidden64_SCI1_epochs100_bc256_lr0.02_0  
+
+mse:0.3859538435935974, mae:0.39782997965812683
+
+ETTh1_DLinear_ETTh1_sl96_pl96_hidden64_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.3785427510738373, mae:0.39375439286231995
+
+<img width="557" height="393" alt="image" src="https://github.com/user-attachments/assets/cfcbfd0f-cea4-463a-adf5-7af3d95af13a" />
+##
+参数3结果
+
+ETTh1_DLinear_ETTh1_sl96_pl96_hidden64_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.3785427510738373, mae:0.39375439286231995
+
+<img width="546" height="386" alt="image" src="https://github.com/user-attachments/assets/3556636d-14cc-456d-b91a-cc03d059aa62" />
+
+##
+修改参数将pred_len 改为192，hidden_size 改为512得
+
+参数4：data_path ETTh1.csv model_id ETTh1 model Amplifier data ETTh1 features M  seq_len 96  label_len 48 pred_len 192  enc_in 7  hidden_size 512  SCI 0 batch_size 256  learning_rate 0.02 （没开sci）
+
+参数5：data_path ETTh1.csv model_id ETTh1 model Amplifier data ETTh1 features M  seq_len 96  label_len 48 pred_len 192  enc_in 7  hidden_size 512  SCI 1 batch_size 256  learning_rate 0.02 （打开sci）
+
+参数6：data_path ETTh1.csv model_id ETTh1 model DLinear data ETTh1 features M  seq_len 96  label_len 48 pred_len 192  enc_in 7  hidden_size 512  SCI 0 batch_size 256  learning_rate 0.02   （对照模型）
+
+参数4结果
+
+ETTh1_Amplifier_ETTh1_sl96_pl192_hidden512_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.4254792332649231, mae:0.42197751998901367
+
+<img width="557" height="402" alt="image" src="https://github.com/user-attachments/assets/1c265d80-1afc-4dd5-85f8-3fbb138c0313" />
+
+##
+参数5结果
+
+ETTh1_Amplifier_ETTh1_sl96_pl192_hidden512_SCI1_epochs100_bc256_lr0.02_0  
+
+mse:0.44365808367729187, mae:0.43320778012275696
+
+<img width="547" height="400" alt="image" src="https://github.com/user-attachments/assets/fe423628-daa7-4f70-b849-f852df45bd0b" />
+
+##
+参数6结果
+
+ETTh1_DLinear_ETTh1_sl96_pl192_hidden512_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.43304160237312317, mae:0.4246844947338104
+
+<img width="542" height="395" alt="image" src="https://github.com/user-attachments/assets/d6b2f35f-2bdc-4e46-a0c1-7db6804a074f" />
+
+剩余修改参数部分结果相似不再展示图像，其图像在test_results中
+
+其mse和mae结果如下
+
+ETTh1_DLinear_ETTh1_sl96_pl192_hidden512_SCI0_epochs100_bc256_lr0.02_0  
+
+mse:0.43304160237312317, mae:0.4246844947338104
+
+ETTh1_Amplifier_ETTh1_sl96_pl336_hidden512_SCI0_epochs100_bc256_lr0.03_0  
+
+mse:0.4478130042552948, mae:0.43387600779533386
+
+ETTh1_DLinear_ETTh1_sl96_pl336_hidden512_SCI0_epochs100_bc256_lr0.03_0  
+
+mse:0.46446189284324646, mae:0.4532836079597473
+
+ETTh1_Amplifier_ETTh1_sl96_pl720_hidden512_SCI0_epochs100_bc256_lr0.03_0  
+
+mse:0.47592687606811523, mae:0.4633479118347168
+
+ETTh1_DLinear_ETTh1_sl96_pl720_hidden512_SCI0_epochs100_bc256_lr0.03_0  
+
+mse:0.4933238625526428, mae:0.49203816056251526
+
+预测事件越长两种模型效果越差，但放大器模型始终更好一些。
+## 4.3 项目自带ECL数据部分运行结果
+
+ETTh1_Amplifier_ETTh1_sl96_pl192_hidden512_SCI1_epochs100_bc256_lr0.02_0
+
+mse:0.44365808367729187, mae:0.43320778012275696
+
+
+
+## 4.4 项目自带ETTM2数据部分运行结果
 
 
 # 五、论文公式对应代码注释
