@@ -106,7 +106,48 @@ torch == 2.0.1（需要卸载在官网找到合适的版本指令下载）
 
 # 四、运行结果
 
-打开项目后按照scripts文件夹里的文件调整参数训练，作者给出了ELC、ETTH1、ETTM1的训练参数。
+打开项目后按照scripts文件夹里的文件调整参数训练，作者仅给出给出了ELC、ETTH1、ETTM1的训练参数。
+
+## 4.1 项目自带ETTM1数据部分运行结果
+
+现在训练EETM1部分注意路径改为（../../dataset/ETT-small/与run.py里的格式一致）
+
+参数1：model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02 （没开sci）
+
+参数2：model Amplifier data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 1 batch_size 32  learning_rate 0.02 （打开sci）
+
+参数3：model DLinear data ETTm1 features M  seq_len 96  label_len 48 pred_len 96  enc_in 7  hidden_size 128  SCI 0 batch_size 32  learning_rate 0.02    （对照模型）
+
+完成界面如下：
+
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/340065f2-8754-40e5-89d0-9b054718aee4" />
+
+结果图像在test_results文件中。mse和mae值在result_long_term_forcast.txt中。由于图像太多仅选取一部分其余在test_results里查看。
+
+参数1结果（图均选140）（没开sci）
+
+ETTm1_Amplifier_ETTm1_sl96_pl96_hidden128_SCI0_epochs100_bc32_lr0.02_0  
+
+mse:0.31615880131721497, mae:0.3549429178237915
+
+<img width="554" height="399" alt="image" src="https://github.com/user-attachments/assets/6264bf8b-530b-46e3-ad85-265cfa8ae143" />
+
+参数2结果（图均选140）（开sci）
+
+ETTm1_Amplifier_ETTm1_sl96_pl96_hidden128_SCI1_epochs100_bc32_lr0.02_0  
+
+mse:0.36960580945014954, mae:0.39149343967437744
+
+<img width="555" height="403" alt="image" src="https://github.com/user-attachments/assets/f4b01084-47e8-4e5e-9e17-b3ffec6660e6" />
+
+参数3结果（图均选140）（对照组）
+
+ETTm1_DLinear_ETTm1_sl96_pl96_hidden128_SCI1_epochs100_bc32_lr0.02_0  
+
+mse:0.34127920866012573, mae:0.3702485263347626
+
+<img width="555" height="407" alt="image" src="https://github.com/user-attachments/assets/52fc45d3-1a56-4279-b545-b98c785fb841" />
+
 
 # 五、论文公式对应代码注释
 
