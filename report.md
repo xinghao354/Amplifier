@@ -338,13 +338,40 @@ mse:0.1944434493780136, mae:0.2768252193927765
 
 参数4：data_path electricity.csv model_id ECL model DLinear data custom features M  seq_len 96  label_len 48 pred_len 192  enc_in 321  hidden_size 512  SCI 0 batch_size 16  learning_rate 0.002   （对照模型）
 
-参数3结果（图选320）
+参数3结果（图选300）
 
-参数4结果（图选320）
+ECL_Amplifier_custom_sl96_pl192_hidden512_SCI1_epochs100_bc16_lr0.002_0  
+
+mse:0.15799051523208618, mae:0.2515788674354553
+
+<img width="547" height="400" alt="image" src="https://github.com/user-attachments/assets/cbd4b780-26ad-4381-a7a8-82149c78c0d5" />
+
+无sci的结果
+
+ECL_Amplifier_custom_sl96_pl192_hidden512_SCI0_epochs100_bc16_lr0.002_0  
+
+mse:0.16809605062007904, mae:0.25789228081703186
+
+<img width="687" height="486" alt="image" src="https://github.com/user-attachments/assets/c219ef50-b8d4-4aca-a0aa-9261dee04b0d" />
+
+##
+参数4结果（图选300）
+
+ECL_DLinear_custom_sl96_pl192_hidden512_SCI0_epochs100_bc16_lr0.002_0  
+
+mse:0.19318024814128876, mae:0.27991679310798645
+
+<img width="682" height="469" alt="image" src="https://github.com/user-attachments/assets/c5edfd2a-302c-4126-9f49-5470c0c95223" />
 
 ## 4.4 项目ETTM2数据部分运行结果
 
 作者没给这方面的参数，所以修改EETM1的参数将EETM1改为EETM2进行预测，结果如下
+
+ETTm2_DLinear_ETTm2_sl96_pl96_hidden128_SCI0_epochs100_bc256_lr0.005_0  
+mse:0.19320979714393616, mae:0.29019472002983093
+
+ETTm2_DLinear_ETTm2_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0  
+mse:0.5312734842300415, mae:0.5080977082252502
 
 # 五、论文公式对应代码注释
 
