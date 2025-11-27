@@ -174,7 +174,7 @@ mse:0.38090980052948, mae:0.38987720012664795
 
 <img width="558" height="406" alt="image" src="https://github.com/user-attachments/assets/2c8becf9-b8cd-4082-b8b5-c4f3e3d88d94" />
 
-剩余修改参数部分结果相似不再展示图像，其图像在test_results中
+剩余修改参数部分结果相似不再展示图像仅展示mse和mae结果
 
 其mse和mae结果如下
 
@@ -270,7 +270,7 @@ mse:0.43304160237312317, mae:0.4246844947338104
 
 <img width="542" height="395" alt="image" src="https://github.com/user-attachments/assets/d6b2f35f-2bdc-4e46-a0c1-7db6804a074f" />
 
-剩余修改参数部分结果相似不再展示图像，其图像在test_results中
+剩余修改参数部分结果相似不再展示图像
 
 其mse和mae结果如下
 
@@ -396,6 +396,9 @@ ETTm2_DLinear_ETTm2_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0 （对�
 mse:0.5312734842300415, mae:0.5080977082252502
 
 <img width="673" height="485" alt="image" src="https://github.com/user-attachments/assets/66eb193b-4f4a-4db6-9285-80fe670ccf50" />
+
+
+以上训练的mse和mae结果均可在result_long_term_forecast.txt中找到
 
 # 五、论文公式对应代码注释
 
