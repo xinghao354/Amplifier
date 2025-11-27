@@ -297,14 +297,54 @@ mse:0.4933238625526428, mae:0.49203816056251526
 预测事件越长两种模型效果越差，但放大器模型始终更好一些。
 ## 4.3 项目自带ECL数据部分运行结果
 
-ETTh1_Amplifier_ETTh1_sl96_pl192_hidden512_SCI1_epochs100_bc256_lr0.02_0
+现在训练ECL部分注意路径改为（../../dataset/electricity//与run.py里的格式一致）
 
-mse:0.44365808367729187, mae:0.43320778012275696
+参数1：data_path electricity.csv model_id ECL model Amplifier data custom features M  seq_len 96  label_len 48 pred_len 96  enc_in 321  hidden_size 512  SCI 1 batch_size 16  learning_rate 0.005 （打开sci）
 
+参数2：data_path electricity.csv model_id ECL model DLinear data custom features M  seq_len 96  label_len 48 pred_len 96  enc_in 321  hidden_size 512  SCI 0 batch_size 16  learning_rate 0.005   （对照模型）
 
+由于图太多故选320做对比其余再test_results文件夹里
 
-## 4.4 项目自带ETTM2数据部分运行结果
+参数1结果（图选320）
 
+ECL_Amplifier_custom_sl96_pl96_hidden512_SCI1_epochs100_bc16_lr0.005_0  
+
+mse:0.1469729244709015, mae:0.24230213463306427
+
+<img width="558" height="407" alt="image" src="https://github.com/user-attachments/assets/be7fd510-714e-4858-9a21-c7bf471570b2" />
+
+##
+附带未开sci时的结果
+
+ECL_Amplifier_custom_sl96_pl96_hidden512_SCI0_epochs100_bc16_lr0.005_0  
+
+mse:0.1562393456697464, mae:0.24721276760101318
+
+<img width="556" height="403" alt="image" src="https://github.com/user-attachments/assets/f7b716f5-9b09-422c-a516-45e5f8e500ec" />
+
+##
+参数2结果（图选320）
+
+ECL_DLinear_custom_sl96_pl96_hidden512_SCI0_epochs100_bc16_lr0.005_0  
+
+mse:0.1944434493780136, mae:0.2768252193927765
+
+<img width="556" height="403" alt="image" src="https://github.com/user-attachments/assets/4f8f3249-7248-4691-bf79-0a9ff0d28421" />
+
+##
+修改参数pred_len 为192，learning_rate为0.002得
+
+参数3：data_path electricity.csv model_id ECL model Amplifier data custom features M  seq_len 96  label_len 48 pred_len 192  enc_in 321  hidden_size 512  SCI 1 batch_size 16  learning_rate 0.002 （打开sci）
+
+参数4：data_path electricity.csv model_id ECL model DLinear data custom features M  seq_len 96  label_len 48 pred_len 192  enc_in 321  hidden_size 512  SCI 0 batch_size 16  learning_rate 0.002   （对照模型）
+
+参数3结果（图选320）
+
+参数4结果（图选320）
+
+## 4.4 项目ETTM2数据部分运行结果
+
+作者没给这方面的参数，所以修改EETM1的参数将EETM1改为EETM2进行预测，结果如下
 
 # 五、论文公式对应代码注释
 
