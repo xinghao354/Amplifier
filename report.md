@@ -365,13 +365,37 @@ mse:0.19318024814128876, mae:0.27991679310798645
 
 ## 4.4 项目ETTM2数据部分运行结果
 
-作者没给这方面的参数，所以修改EETM1的参数将EETM1改为EETM2进行预测，结果如下
+作者没给这方面的参数，所以修改EETM1的参数将EETM1改为EETM2进行预测，结果如下（均选图片40）
 
-ETTm2_DLinear_ETTm2_sl96_pl96_hidden128_SCI0_epochs100_bc256_lr0.005_0  
-mse:0.19320979714393616, mae:0.29019472002983093
+ETTm2_Amplifier_ETTm2_sl96_pl96_hidden128_SCI0_epochs100_bc32_lr0.02_0 (放大模型)
 
-ETTm2_DLinear_ETTm2_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0  
+mse:0.1787935197353363, mae:0.26090431213378906
+
+<img width="687" height="488" alt="image" src="https://github.com/user-attachments/assets/242b135d-f0d7-4b35-88c3-07c9e49a7c3e" />
+
+##
+
+Tm2_DLinear_ETTm2_sl96_pl96_hidden128_SCI0_epochs100_bc32_lr0.02_0  （对比）
+
+mse:0.18988439440727234, mae:0.2844039499759674
+
+<img width="697" height="480" alt="image" src="https://github.com/user-attachments/assets/e31fe478-45dc-4f29-8f65-b7a4644feae1" />
+
+##
+
+ETTm2_Amplifier_ETTm2_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0 （放大模型）
+
+mse:0.3903094530105591, mae:0.39402249455451965
+
+<img width="680" height="481" alt="image" src="https://github.com/user-attachments/assets/c5e745d1-a4fa-4d49-8e14-25b7044d448c" />
+
+##
+
+ETTm2_DLinear_ETTm2_sl96_pl720_hidden128_SCI0_epochs100_bc256_lr0.005_0 （对比）
+
 mse:0.5312734842300415, mae:0.5080977082252502
+
+<img width="673" height="485" alt="image" src="https://github.com/user-attachments/assets/66eb193b-4f4a-4db6-9285-80fe670ccf50" />
 
 # 五、论文公式对应代码注释
 
